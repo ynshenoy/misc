@@ -1,0 +1,24 @@
+require 'yaml'
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.provider :virtualbox do |vb, override|
+    vb.memory = 16384
+    vb.cpus = 2
+  end
+
+  config.vm.network "private_network", :type => :dhcp, :ip => "192.168.10.0", :netmask => "255.255.255.0"
+
+  5.times do | i |
+    node_name = "node" + (i+1).to_s
+    config.vm.define "#{node_name}" do | cass |
+      cass.vm.hostname = "#{node_name}"
+      cass.vm.synced_folder "cass_files/", "/usr/local/cass_files", create: true
+      cass.vm.provision "shell", path: "node_provision/oracle_java.sh"
+      cass.vm.provision "shell", :inline=> "echo 'http_proxy=http://10.135.121.138:3128' >> /etc/environment"
+      cass.vm.provision "shell", :inline=> "echo 'https_proxy=http://10.135.121.138:3128' >> /etc/environment"
+      cass.vm.provision "shell", :inline=> "echo 'no_proxy=localhost,127.0.0.1,192.168.10.0/24' >> /etc/environment"
+    end
+  end
+end
