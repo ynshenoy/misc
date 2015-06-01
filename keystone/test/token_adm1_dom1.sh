@@ -1,4 +1,4 @@
-ADMIN_TOKEN=$(\
+ADM1_TOKEN=$(\
 curl http://localhost:5000/v3/auth/tokens \
     -s \
     -i \
@@ -13,19 +13,16 @@ curl http://localhost:5000/v3/auth/tokens \
             "password": {
                 "user": {
                     "domain": {
-                        "name": "Default"
+                        "name": "dom1"
                     },
-                    "name": "admin",
-                    "password": "123"
+                    "name": "adm1",
+                    "password": "password"
                 }
             }
         },
         "scope": {
-            "project": {
-                "domain": {
-                    "name": "Default"
-                },
-                "name": "admin"
+            "domain": {
+                "name": "dom1"
             }
         }
     }
