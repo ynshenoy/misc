@@ -1,4 +1,4 @@
-curl http://localhost:5000/v2.0/tokens \
+curl https://identity.jiocloud.com:5000/v2.0/tokens \
     -s \
     -i \
     -H "Content-Type: application/json" \

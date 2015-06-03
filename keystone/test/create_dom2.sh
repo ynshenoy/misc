@@ -1,5 +1,5 @@
 ID_DOM2=$(\
-curl http://localhost:5000/v3/domains \
+curl https://identity.jiocloud.com:5000/v3/domains \
     -s \
     -H "X-Auth-Token: $CLOUD_ADMIN_TOKEN" \
     -H "Content-Type: application/json" \

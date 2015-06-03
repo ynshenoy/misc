@@ -1,5 +1,5 @@
 ID_TENANT_ADMIN_ROLE=$(\
-curl http://localhost:5000/v3/roles \
+curl https://identity.jiocloud.com:5000/v3/roles \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json" \
@@ -10,4 +10,4 @@ curl http://localhost:5000/v3/roles \
     }
 }' | jq .role.id | tr -d '"' )
 
-echo "ID of domain cloud: $ID_TENANT_ADMIN_ROLE"
+echo "ID of tenant admin role: $ID_TENANT_ADMIN_ROLE"

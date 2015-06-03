@@ -1,4 +1,4 @@
-CLOUD_ADMIN_TOKEN=$(\
+ADM1_USR1_TOKEN=$(\
 curl https://identity.jiocloud.com:5000/v3/auth/tokens \
     -s \
     -i \
@@ -13,17 +13,22 @@ curl https://identity.jiocloud.com:5000/v3/auth/tokens \
             "password": {
                 "user": {
                     "domain": {
-                        "name": "admin_domain"
+                        "name": "dom1"
                     },
-                    "name": "cloud_admin",
+                    "name": "adm1",
                     "password": "password"
                 }
             }
         },
         "scope": {
+            "project": {
                 "domain": {
-                    "name": "admin_domain"
-                }
+                    "name": "dom1"
+                },
+                "name": "prj1"
+            }
         }
     }
 }' | grep ^X-Subject-Token: | awk '{print $2}' )
+
+echo "adm1_usr1 token is: $ADM1_USR1_TOKEN"

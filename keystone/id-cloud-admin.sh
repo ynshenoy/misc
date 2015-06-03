@@ -1,5 +1,5 @@
 ID_CLOUD_ADMIN=$(\
-curl http://localhost:5000/v3/users \
+curl https://identity.jiocloud.com:5000/v3/users \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json" \

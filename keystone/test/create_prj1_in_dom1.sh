@@ -1,5 +1,5 @@
 ID_PRJ1=$(\
-curl http://localhost:5000/v3/projects \
+curl https://identity.jiocloud.com:5000/v3/projects \
     -s \
     -H "X-Auth-Token: $ADM1_TOKEN" \
     -H "Content-Type: application/json" \

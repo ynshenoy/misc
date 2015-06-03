@@ -1,5 +1,5 @@
 ADMIN_TOKEN=$(\
-curl http://localhost:5000/v3/auth/tokens \
+curl https://identity.jiocloud.com:5000/v3/auth/tokens \
     -s \
     -i \
     -H "Content-Type: application/json" \
@@ -16,7 +16,7 @@ curl http://localhost:5000/v3/auth/tokens \
                         "name": "Default"
                     },
                     "name": "admin",
-                    "password": "123"
+                    "password": "Chang3M3"
                 }
             }
         },
@@ -25,7 +25,7 @@ curl http://localhost:5000/v3/auth/tokens \
                 "domain": {
                     "name": "Default"
                 },
-                "name": "admin"
+                "name": "openstack"
             }
         }
     }

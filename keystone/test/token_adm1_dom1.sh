@@ -1,5 +1,5 @@
 ADM1_TOKEN=$(\
-curl http://localhost:5000/v3/auth/tokens \
+curl https://identity.jiocloud.com:5000/v3/auth/tokens \
     -s \
     -i \
     -H "Content-Type: application/json" \

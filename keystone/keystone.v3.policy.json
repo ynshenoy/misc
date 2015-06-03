@@ -1,7 +1,7 @@
 {
     "admin_required": "role:admin",
     "tenant_admin_required": "role:tenant_admin",
-    "cloud_admin": "rule:admin_required and domain_id:a066aac8c6084b4e8cc4630e2ca905b8",
+    "cloud_admin": "rule:admin_required and domain_id:0b887fd9f82f48339cff8aece3a8826a",
     "service_role": "role:service",
     "service_or_admin": "rule:admin_required or rule:service_role",
     "owner" : "user_id:%(user_id)s or user_id:%(target.token.user_id)s",
