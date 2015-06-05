@@ -7,9 +7,9 @@
 #}
 
 
-file { 'cloud_admin_check':
-  path    => '/home/vagrant/cloud_admin_check.sh',
-  content => template("/etc/puppet/templates/cloud_admin_check.erb"),
+file { 'cloud_admin_create':
+  path    => '/home/vagrant/cloud_admin_create.sh',
+  content => template("/etc/puppet/templates/cloud_admin_create.erb"),
   ensure  => 'file',
   mode    => 755
 }
