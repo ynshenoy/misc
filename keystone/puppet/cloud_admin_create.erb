@@ -1,0 +1,88 @@
+echo "Getting admin token..."
+ADMIN_TOKEN=$(\
+curl http://192.168.100.1:5000/v3/auth/tokens \
+    -s \
+    -i \
+    -H "Content-Type: application/json" \
+    -d '
+{
+    "auth": {
+        "identity": {
+            "methods": [
+                "password"
+            ],
+            "password": {
+                "user": {
+                    "domain": {
+                        "name": "Default"
+                    },
+                    "name": "admin",
+                    "password": "123"
+                }
+            }
+        },
+        "scope": {
+            "project": {
+                "domain": {
+                    "name": "Default"
+                },
+                "name": "admin"
+            }
+        }
+    }
+}' | grep ^X-Subject-Token: | awk '{print $2}' )
+
+echo "Creating admin_domain..."
+
+ID_ADMIN_DOMAIN=$(\
+curl http://192.168.100.1:5000/v3/domains \
+    -s \
+    -H "X-Auth-Token: $ADMIN_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '
+{
+    "domain": {
+    "enabled": true,
+    "name": "admin_domain"
+    }
+}' | jq .domain.id | tr -d '"' )
+
+echo "ID of admin_domain: $ID_ADMIN_DOMAIN"
+
+echo "Creating cloud_admin..." 
+
+ID_CLOUD_ADMIN=$(\
+curl http://192.168.100.1:5000/v3/users \
+    -s \
+    -H "X-Auth-Token: $ADMIN_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "
+{
+    \"user\": {
+        \"description\": \"Cloud administrator\",
+        \"domain_id\": \"$ID_ADMIN_DOMAIN\",
+        \"enabled\": true,
+        \"name\": \"cloud_admin\",
+        \"password\": \"password\"
+    }
+}" | jq .user.id | tr -d '"' )
+
+echo "ID of cloud_admin is: $ID_CLOUD_ADMIN"
+
+echo "Getting id of admin role..."
+
+ADMIN_ROLE_ID=$(\
+curl http://192.168.100.1:5000/v3/roles?name=admin \
+    -s \
+    -H "X-Auth-Token: $ADMIN_TOKEN" \
+| jq .roles[0].id | tr -d '"' )
+
+echo "ID of admin role is: $ADMIN_ROLE_ID"
+
+echo "Putting admin role for cloud_admin in admin_domain"
+
+curl -X PUT http://192.168.100.1:5000/v3/domains/${ID_ADMIN_DOMAIN}/users/${ID_CLOUD_ADMIN}/roles/${ADMIN_ROLE_ID} \
+    -s \
+    -i \
+    -H "X-Auth-Token: $ADMIN_TOKEN" \
+    -H "Content-Type: application/json"
