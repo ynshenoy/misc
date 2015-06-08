@@ -34,7 +34,7 @@ curl http://192.168.100.1:5000/v3/auth/tokens \
 
 echo "Creating admin_domain..."
 
-ID_ADMIN_DOMAIN=$(\
+export ID_ADMIN_DOMAIN=$(\
 curl http://192.168.100.1:5000/v3/domains \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
@@ -86,3 +86,6 @@ curl -X PUT http://192.168.100.1:5000/v3/domains/${ID_ADMIN_DOMAIN}/users/${ID_C
     -i \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json"
+
+echo "Writing ID_ADMIN_DOMAIN to replace_domain_admin_in_policy_file"
+sed -i "1s/^/ID_ADMIN_DOMAIN=$ID_ADMIN_DOMAIN\n/" replace_domain_id_in_policy_file.sh

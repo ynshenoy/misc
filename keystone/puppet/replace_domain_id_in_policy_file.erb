@@ -1,0 +1,2 @@
+sed '/"cloud_admin": "rule:admin_required and domain_id:Default"/c\"cloud_admin": "rule:admin_required and domain_id:'"$ID_ADMIN_DOMAIN\"," /etc/keystone/policy.json > /tmp/policy.json
+mv /tmp/policy.json /etc/keystone/policy.json
