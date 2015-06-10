@@ -5,35 +5,35 @@ file { 'policy.json':
 } ->
 
 file { 'replace_domain_id_in_policy_file':
-  path    => '/home/vagrant/replace_domain_id_in_policy_file.sh',
+  path    => '/usr/local/bin/replace_domain_id_in_policy_file.sh',
   content => template("/etc/puppet/templates/replace_domain_id_in_policy_file.erb"),
   ensure  => file,
   mode    => 755,
 } ->
 
 file { 'cloud_admin_check':
-  path    => '/home/vagrant/cloud_admin_check.sh',
+  path    => '/usr/local/bin/cloud_admin_check.sh',
   content => template("/etc/puppet/templates/cloud_admin_check.erb"),
   ensure  => 'file',
   mode    => 755
 } ->
 
 file { 'cloud_admin_create':
-  path    => '/home/vagrant/cloud_admin_create.sh',
+  path    => '/usr/local/bin/cloud_admin_create.sh',
   content => template("/etc/puppet/templates/cloud_admin_create.erb"),
   ensure  => 'file',
   mode    => 755
 } ->
 
 exec { 'cloud_admin_create':
- path      => '/bin:/usr/bin:/home/vagrant',
+ path      => '/bin:/usr/bin:/usr/local/bin',
  logoutput => true,
  command   => 'echo "cloud_admin is not present";cloud_admin_create.sh',
  unless   => 'cloud_admin_check.sh'
 } -> 
 
 exec { 'replace_domain_id':
- path      => '/bin:/usr/bin:/home/vagrant',
+ path      => '/bin:/usr/bin:/usr/local/bin',
  logoutput => true,
  command   => 'replace_domain_id_in_policy_file.sh',
  onlyif    => 'cloud_admin_check.sh'
