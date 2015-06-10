@@ -1,39 +1,6 @@
-ADMIN_TOKEN=$(\
-curl http://192.168.100.1:5000/v3/auth/tokens \
-    -s \
-    -i \
-    -H "Content-Type: application/json" \
-    -d '
-    {
-        "auth": {
-            "identity": {
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "domain": {
-                            "name": "Default"
-                        },
-                        "name": "admin",
-                        "password": "123"
-                    }
-                }
-            },
-            "scope": {
-                "project": {
-                    "domain": {
-                        "name": "Default"
-                    },
-                    "name": "admin"
-                }
-            }
-        }
-        }' | grep ^X-Subject-Token: | awk '{print $2}' )
-
-echo $ADMIN_TOKEN
-
-ADMIN_DOMAIN=$(curl -H "X-Auth-Token: $ADMIN_TOKEN" http://192.168.100.1:5000/v3/domains?name=admin_domain | jq .domains[0].id | tr -d '"')
+ADMIN_TOKEN=123
+AUTH_URL=http://192.168.100.1:5000/v3
+ADMIN_DOMAIN=$(curl -H "X-Auth-Token: $ADMIN_TOKEN" $AUTH_URL/domains?name=admin_domain | jq .domains[0].id | tr -d '"')
 
 if [ $ADMIN_DOMAIN = 'null' ]; then
     exit 1

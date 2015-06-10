@@ -1,41 +1,9 @@
-echo "Getting admin token..."
-ADMIN_TOKEN=$(\
-curl http://192.168.100.1:5000/v3/auth/tokens \
-    -s \
-    -i \
-    -H "Content-Type: application/json" \
-    -d '
-{
-    "auth": {
-        "identity": {
-            "methods": [
-                "password"
-            ],
-            "password": {
-                "user": {
-                    "domain": {
-                        "name": "Default"
-                    },
-                    "name": "admin",
-                    "password": "123"
-                }
-            }
-        },
-        "scope": {
-            "project": {
-                "domain": {
-                    "name": "Default"
-                },
-                "name": "admin"
-            }
-        }
-    }
-}' | grep ^X-Subject-Token: | awk '{print $2}' )
-
+ADMIN_TOKEN=123
+AUTH_URL=http://192.168.100.1:5000/v3
 echo "Creating admin_domain..."
 
 export ID_ADMIN_DOMAIN=$(\
-curl http://192.168.100.1:5000/v3/domains \
+curl $AUTH_URL/domains \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json" \
@@ -52,7 +20,7 @@ echo "ID of admin_domain: $ID_ADMIN_DOMAIN"
 echo "Creating cloud_admin..." 
 
 ID_CLOUD_ADMIN=$(\
-curl http://192.168.100.1:5000/v3/users \
+curl $AUTH_URL/users \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json" \
@@ -72,7 +40,7 @@ echo "ID of cloud_admin is: $ID_CLOUD_ADMIN"
 echo "Getting id of admin role..."
 
 ADMIN_ROLE_ID=$(\
-curl http://192.168.100.1:5000/v3/roles?name=admin \
+curl $AUTH_URL/roles?name=admin \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
 | jq .roles[0].id | tr -d '"' )
@@ -81,11 +49,8 @@ echo "ID of admin role is: $ADMIN_ROLE_ID"
 
 echo "Putting admin role for cloud_admin in admin_domain"
 
-curl -X PUT http://192.168.100.1:5000/v3/domains/${ID_ADMIN_DOMAIN}/users/${ID_CLOUD_ADMIN}/roles/${ADMIN_ROLE_ID} \
+curl -X PUT $AUTH_URL/domains/${ID_ADMIN_DOMAIN}/users/${ID_CLOUD_ADMIN}/roles/${ADMIN_ROLE_ID} \
     -s \
     -i \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json"
-
-echo "Writing ID_ADMIN_DOMAIN to replace_domain_admin_in_policy_file"
-sed -i "1s/^/ID_ADMIN_DOMAIN=$ID_ADMIN_DOMAIN\n/" replace_domain_id_in_policy_file.sh
