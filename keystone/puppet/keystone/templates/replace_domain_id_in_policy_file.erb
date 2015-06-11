@@ -1,7 +1,8 @@
-ADMIN_TOKEN=123
-AUTH_URL=http://192.168.100.1:5000/v3
+ADMIN_TOKEN=<%=@admin_token%>
+AUTH_URL=<%=@auth_url%>
+ADMIN_DOMAIN_NAME=<%=@admin_domain_name%>
 
-ID_ADMIN_DOMAIN=$(curl -H "X-Auth-Token: $ADMIN_TOKEN" $AUTH_URL/domains?name=admin_domain | jq .domains[0].id | tr -d '"')
+ID_ADMIN_DOMAIN=$(curl -H "X-Auth-Token: $ADMIN_TOKEN" $AUTH_URL/domains?name=$ADMIN_DOMAIN_NAME | jq .domains[0].id | tr -d '"')
 echo "id_admin_domain is: $ID_ADMIN_DOMAIN"
 
 sed '/"cloud_admin": "rule:admin_required and domain_id:Default"/c\"cloud_admin": "rule:admin_required and domain_id:'"$ID_ADMIN_DOMAIN\"," /etc/keystone/policy.json > /tmp/policy.json

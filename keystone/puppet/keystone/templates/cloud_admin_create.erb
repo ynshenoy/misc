@@ -1,23 +1,28 @@
-ADMIN_TOKEN=123
-AUTH_URL=http://192.168.100.1:5000/v3
+ADMIN_TOKEN=<%=@admin_token%>
+AUTH_URL=<%=@auth_url%>
+ADMIN_DOMAIN_NAME=<%=@admin_domain_name%>
+ADMIN_USER_NAME=<%=@admin_user_name%>
+ADMIN_USER_PASSWORD=<%=@admin_user_password%>
+ADMIN_ROLE=<%=@admin_role%>
+
 echo "Creating admin_domain..."
 
-export ID_ADMIN_DOMAIN=$(\
+ID_ADMIN_DOMAIN=$(\
 curl $AUTH_URL/domains \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
     -H "Content-Type: application/json" \
-    -d '
+    -d "
 {
-    "domain": {
-    "enabled": true,
-    "name": "admin_domain"
+    \"domain\": {
+    \"enabled\": true,
+    \"name\": \"$ADMIN_DOMAIN_NAME\"
     }
-}' | jq .domain.id | tr -d '"' )
+}" | jq .domain.id | tr -d '"' )
 
 echo "ID of admin_domain: $ID_ADMIN_DOMAIN"
 
-echo "Creating cloud_admin..." 
+echo "Creating cloud_admin..."
 
 ID_CLOUD_ADMIN=$(\
 curl $AUTH_URL/users \
@@ -30,8 +35,8 @@ curl $AUTH_URL/users \
         \"description\": \"Cloud administrator\",
         \"domain_id\": \"$ID_ADMIN_DOMAIN\",
         \"enabled\": true,
-        \"name\": \"cloud_admin\",
-        \"password\": \"password\"
+        \"name\": \"$ADMIN_USER_NAME\",
+        \"password\": \"$ADMIN_USER_PASSWORD\"
     }
 }" | jq .user.id | tr -d '"' )
 
@@ -40,7 +45,7 @@ echo "ID of cloud_admin is: $ID_CLOUD_ADMIN"
 echo "Getting id of admin role..."
 
 ADMIN_ROLE_ID=$(\
-curl $AUTH_URL/roles?name=admin \
+curl $AUTH_URL/roles?name=$ADMIN_ROLE \
     -s \
     -H "X-Auth-Token: $ADMIN_TOKEN" \
 | jq .roles[0].id | tr -d '"' )

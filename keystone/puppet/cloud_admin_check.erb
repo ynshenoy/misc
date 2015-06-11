@@ -1,9 +1,0 @@
-ADMIN_TOKEN=123
-AUTH_URL=http://192.168.100.1:5000/v3
-ADMIN_DOMAIN=$(curl -H "X-Auth-Token: $ADMIN_TOKEN" $AUTH_URL/domains?name=admin_domain | jq .domains[0].id | tr -d '"')
-
-if [ $ADMIN_DOMAIN = 'null' ]; then
-    exit 1
-else
-    exit 0
-fi
